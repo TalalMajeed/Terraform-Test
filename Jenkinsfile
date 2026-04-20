@@ -41,13 +41,13 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                sh 'terraform plan -out=tfplan -input=false'
+                sh 'terraform plan -lock-timeout=60s -out=tfplan -input=false'
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve tfplan'
+                sh 'terraform apply -lock-timeout=60s -auto-approve tfplan'
             }
         }
     }
