@@ -6,6 +6,7 @@ pipeline {
         ARM_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
         ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
         ARM_TENANT_ID       = credentials('ARM_TENANT_ID')
+        PATH = "/opt/homebrew/bin:${env.PATH}"
     }
 
     options {
@@ -16,6 +17,13 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+        
+        stage('Check Terraform') {
+            steps {
+                sh 'which terraform'
+                sh 'terraform -version'
             }
         }
 
@@ -46,7 +54,7 @@ pipeline {
 
     post {
         always {
-            sh 'rm -f tfplan'
+            sh 'rm -f tfplan || true'
         }
     }
 }
